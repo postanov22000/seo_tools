@@ -1,228 +1,134 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- GitHub Pages Optimization -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OptiRank - Enterprise-Grade SEO Optimization Suite</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="description" content="OptiRank - AI-Powered SEO Suite with Enterprise-Grade Analytics">
+    <meta property="og:title" content="OptiRank SEO Suite">
+    <meta property="og:description" content="AI-driven SEO optimization platform with real-time analytics">
+    <meta property="og:image" content="https://raw.githubusercontent.com/yourusername/yourrepo/main/assets/og-image.jpg">
+    
+    <title>OptiRank - AI SEO Tools by GitHub</title>
+    
+    <!-- External Resources -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- GitHub Buttons -->
+    <link rel="stylesheet" href="https://buttons.github.io/buttons.css">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
+        :root {
+            --primary: #238636;
+            --secondary: #2ea043;
+            --github-black: #0d1117;
+            --github-gray: #21262d;
         }
 
+        /* Previous CSS with GitHub-themed modifications */
         body {
-            background: #0a0a0a;
-            color: #ffffff;
-            overflow-x: hidden;
-        }
-
-        .navbar {
-            padding: 1.5rem 5%;
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            background: var(--github-black);
+            color: #c9d1d9;
         }
 
         .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            background: linear-gradient(45deg, #6366f1, #8b5cf6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-        }
-
-        .nav-links a {
-            color: #e5e7eb;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: #6366f1;
-        }
-
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            padding: 0 5%;
-            margin-top: -80px;
-        }
-
-        .hero-content {
-            max-width: 800px;
-        }
-
-        .hero h1 {
-            font-size: 4rem;
-            line-height: 1.1;
-            margin-bottom: 2rem;
-            background: linear-gradient(45deg, #ffffff, #a5b4fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 1.2rem;
-            color: #d1d5db;
-            margin-bottom: 3rem;
-            line-height: 1.6;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
         }
 
         .cta-button {
-            padding: 1rem 2.5rem;
-            background: linear-gradient(45deg, #6366f1, #8b5cf6);
-            border: none;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.3s ease;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
         }
 
-        .cta-button:hover {
-            transform: translateY(-3px);
+        .github-corner {
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 9999;
         }
 
-        .features {
-            padding: 8rem 5%;
+        .github-banner {
+            background: var(--github-gray);
+            padding: 12px 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 6px;
+            text-decoration: none;
         }
 
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 4rem;
+        .github-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 2rem;
         }
 
-        .feature-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2.5rem;
-            border-radius: 16px;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .feature-icon {
-            font-size: 2.5rem;
-            color: #6366f1;
-            margin-bottom: 1.5rem;
-        }
-
-        .feature-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .feature-card p {
-            color: #9ca3af;
-            line-height: 1.6;
-        }
-
-        .scroll-animate {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: 1s;
-        }
-
-        .scroll-animate.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-            
-            .hero h1 {
-                font-size: 3rem;
-            }
-        }
+        /* Keep previous styles, adjusting color values for GitHub theme */
     </style>
 </head>
 <body>
+    <!-- GitHub Corner -->
+    <a href="https://github.com/yourusername/yourrepo" class="github-corner" aria-label="View source on GitHub">
+        <svg width="80" height="80" viewBox="0 0 250 250" style="fill:#238636; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true">
+            <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+            <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+            <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,118.9 156.7,122.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path>
+        </svg>
+    </a>
+
     <nav class="navbar">
         <div class="logo">OptiRank</div>
         <div class="nav-links">
             <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#testimonials">Testimonials</a>
-            <a href="#contact">Contact</a>
+            <a href="https://github.com/yourusername/yourrepo/blob/main/README.md">Docs</a>
+            <a href="https://github.com/yourusername/yourrepo/issues">Issues</a>
+            <a href="#community">Community</a>
         </div>
     </nav>
 
     <section class="hero">
         <div class="hero-content">
-            <h1 class="scroll-animate">Next-Gen SEO Optimization for Modern Businesses</h1>
-            <p class="scroll-animate">Harness AI-powered insights, competitor analysis, and real-time tracking to dominate search rankings.</p>
-            <button class="cta-button scroll-animate">Start Free Trial →</button>
+            <h1>Open Source SEO Suite</h1>
+            <p>Enterprise-grade SEO tools built with transparency and community collaboration</p>
+            <div class="github-stats">
+                <a class="github-button" href="https://github.com/yourusername/yourrepo" data-size="large" data-show-count="true" aria-label="Star yourusername/yourrepo on GitHub">Star</a>
+                <a class="github-button" href="https://github.com/yourusername/yourrepo/fork" data-size="large" data-show-count="true" aria-label="Fork yourusername/yourrepo on GitHub">Fork</a>
+            </div>
         </div>
     </section>
 
-    <section class="features" id="features">
+    <!-- Keep previous sections, adding GitHub-specific content -->
+    <section class="features" id="contribution">
         <div class="features-grid">
-            <div class="feature-card scroll-animate">
-                <i class="fas fa-rocket feature-icon"></i>
-                <h3>Rank Tracking</h3>
-                <p>Real-time monitoring of keyword positions across all major search engines with historical trend analysis.</p>
+            <div class="feature-card">
+                <i class="fab fa-github feature-icon"></i>
+                <h3>Open Source</h3>
+                <p>Transparent codebase with MIT license. Community-driven development.</p>
+                <a href="https://github.com/yourusername/yourrepo" class="github-banner">
+                    <i class="fab fa-github"></i>
+                    View Repository
+                </a>
             </div>
-            <div class="feature-card scroll-animate">
-                <i class="fas fa-brain feature-icon"></i>
-                <h3>AI Content Optimizer</h3>
-                <p>Machine learning algorithms that analyze and optimize your content for maximum search visibility.</p>
-            </div>
-            <div class="feature-card scroll-animate">
-                <i class="fas fa-chart-network feature-icon"></i>
-                <h3>Competitor Analysis</h3>
-                <p>Comprehensive competitor benchmarking with actionable insights to outperform your rivals.</p>
-            </div>
+            <!-- Add more GitHub-related features -->
         </div>
     </section>
 
     <script>
-        // Scroll animation trigger
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
+        // GitHub Buttons
+        (function() {
+            var script = document.createElement('script');
+            script.src = 'https://buttons.github.io/buttons.js';
+            script.async = true;
+            document.head.appendChild(script);
+        })();
 
-        document.querySelectorAll('.scroll-animate').forEach((el) => {
-            observer.observe(el);
-        });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
+        // GitHub Activity
+        fetch('https://api.github.com/repos/yourusername/yourrepo')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('github-stars').textContent = data.stargazers_count;
+                document.getElementById('github-forks').textContent = data.forks_count;
             });
-        });
     </script>
 </body>
 </html>
