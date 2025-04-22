@@ -1,6 +1,6 @@
 // GitHub authentication handler
 const GITHUB_TOKEN = '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'; // Generate in GitHub Settings > Developer Settings
-const REPO = 'YOUR_USERNAME/YOUR_REPO'; // e.g., 'yourusername/auth-system'
+const REPO = 'postanov22000/auth-system'; // e.g., 'yourusername/auth-system'
 
 async function handleAuthRequest(action, data) {
     const response = await fetch(`https://api.github.com/repos/${REPO}/dispatches`, {
