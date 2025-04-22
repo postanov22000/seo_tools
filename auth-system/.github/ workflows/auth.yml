@@ -1,0 +1,66 @@
+name: User Authentication
+
+on:
+  repository_dispatch:
+    types: [auth_request]
+
+jobs:
+  process_auth:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
+      - name: Process request
+        id: auth
+        env:
+          ACTION: ${{ github.event.client_payload.action }}
+          DATA: ${{ toJSON(github.event.client_payload.data) }}
+        run: |
+          # Load existing users
+          users=$(cat data/users.json)
+          
+          # Function to save users
+          save_users() {
+            echo "$1" > data/users.json
+            git config --global user.name "GitHub Actions"
+            git config --global user.email "actions@github.com"
+            git add data/users.json
+            git commit -m "Updated users data"
+            git push
+          }
+          
+          if [ "$ACTION" == "signup" ]; then
+            email=$(echo '$DATA' | jq -r '.email')
+            
+            # Check if user exists
+            exists=$(echo "$users" | jq --arg email "$email" 'any(.email == $email)')
+            if [ "$exists" == "true" ]; then
+              echo "result=exists" >> $GITHUB_OUTPUT
+            else
+              # Add new user (with hashed password)
+              hashed_password=$(echo '$DATA.password' | openssl passwd -1 -stdin)
+              new_user=$(echo '$DATA' | jq --arg hash "$hashed_password" '. + {password: $hash, id: (.email | @sha256 | .[0:10]), createdAt: (now | todate)}')
+              updated_users=$(echo "$users" | jq --argjson user "$new_user" '. + [$user]')
+              save_users "$updated_users"
+              echo "result=success" >> $GITHUB_OUTPUT
+            fi
+          
+          elif [ "$ACTION" == "login" ]; then
+            email=$(echo '$DATA' | jq -r '.email')
+            password=$(echo '$DATA' | jq -r '.password')
+            
+            user=$(echo "$users" | jq --arg email "$email" '.[] | select(.email == $email)')
+            if [ -z "$user" ]; then
+              echo "result=not_found" >> $GITHUB_OUTPUT
+            else
+              stored_hash=$(echo "$user" | jq -r '.password')
+              # Verify password (basic check - in production use proper hashing)
+              if [ "$stored_hash" == "$(echo "$password" | openssl passwd -1 -stdin -salt "${stored_hash#*\$}" 2>/dev/null)" ]; then
+                echo "result=success" >> $GITHUB_OUTPUT
+                echo "user_data=$user" >> $GITHUB_OUTPUT
+              else
+                echo "result=invalid_password" >> $GITHUB_OUTPUT
+              fi
+            fi
+          fi
