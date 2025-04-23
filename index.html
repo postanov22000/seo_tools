@@ -215,12 +215,114 @@
                 <p>Comprehensive competitor benchmarking with actionable insights to outperform your rivals.</p>
             </div>
         </div>
-        <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #f1f1f1; padding: 15px; text-align: center; box-shadow: 0 -2px 10px rgba(0,0,0,0.1); z-index: 9999;">
-    <p>We use cookies to personalize content and analyze traffic. 
-       <a href="/cookie-policy">Learn more</a>.</p>
-    <button onclick="acceptCookies()" style="margin-right: 10px;">Accept</button>
-    <button onclick="rejectCookies()">Reject</button>
+        <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(30, 30, 30, 0.95); padding: 20px; text-align: center; box-shadow: 0 -2px 15px rgba(0,0,0,0.3); z-index: 9999; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1);">
+    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 15px;">
+        <p style="margin: 0; color: #e5e7eb; flex: 1; min-width: 300px; text-align: left; font-size: 14px; line-height: 1.5;">
+            We use cookies to personalize content and analyze traffic to improve your experience. 
+            <a href="/cookie-policy" style="color: #6366f1; text-decoration: none;">Learn more</a>.
+        </p>
+        <div style="display: flex; gap: 10px;">
+            <button onclick="acceptCookies()" style="padding: 8px 20px; background: linear-gradient(45deg, #6366f1, #8b5cf6); border: none; border-radius: 6px; color: white; font-weight: 500; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
+                Accept All
+            </button>
+            <button onclick="rejectCookies()" style="padding: 8px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #e5e7eb; font-weight: 500; cursor: pointer; transition: transform 0.2s ease;">
+                Reject
+            </button>
+        </div>
+    </div>
 </div>
+
+<script>
+// Cookie functions
+function setCookie(name, value, daysToLive) {
+    const date = new Date();
+    date.setTime(date.getTime() + (daysToLive * 24 * 60 * 60 * 1000));
+    let expires = "expires=" + date.toUTCString();
+    document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Lax`;
+}
+
+function getCookie(name) {
+    const cookieDecoded = decodeURIComponent(document.cookie);
+    const cookieArray = cookieDecoded.split('; ');
+    let result = null;
+    
+    cookieArray.forEach(cookie => {
+        if (cookie.indexOf(name + '=') === 0) {
+            result = cookie.substring(name.length + 1);
+        }
+    });
+    return result;
+}
+
+function deleteCookie(name) {
+    setCookie(name, null, -1);
+}
+
+// Cookie consent functions
+function showCookieConsent() {
+    if (!getCookie('cookie_consent')) {
+        document.getElementById('cookie-consent-banner').style.display = 'block';
+    }
+}
+
+function acceptCookies() {
+    setCookie('cookie_consent', 'true', 365);
+    document.getElementById('cookie-consent-banner').style.display = 'none';
+    // Now you can set your other cookies
+    console.log('Cookies accepted');
+    // Optional: Trigger GTM or other tracking
+}
+
+function rejectCookies() {
+    setCookie('cookie_consent', 'false', 365);
+    document.getElementById('cookie-consent-banner').style.display = 'none';
+    // Delete all non-essential cookies
+    console.log('Cookies rejected');
+    // Optional: Delete specific cookies here
+}
+
+// Show banner when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Check for typo in the ID - this is a common issue
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner && !getCookie('cookie_consent')) {
+        banner.style.display = 'block';
+    }
+    
+    // Optional: Add smooth appear animation
+    setTimeout(() => {
+        if (banner) banner.style.transition = 'opacity 0.3s ease';
+    }, 100);
+});
+
+// Optional: Add hover effects via JavaScript instead of inline styles
+document.addEventListener('DOMContentLoaded', function() {
+    const acceptBtn = document.querySelector('#cookie-consent-banner button:first-of-type');
+    const rejectBtn = document.querySelector('#cookie-consent-banner button:last-of-type');
+    
+    if (acceptBtn) {
+        acceptBtn.addEventListener('mouseenter', () => {
+            acceptBtn.style.transform = 'translateY(-2px)';
+            acceptBtn.style.boxShadow = '0 4px 12px rgba(99, 102, 241, 0.3)';
+        });
+        acceptBtn.addEventListener('mouseleave', () => {
+            acceptBtn.style.transform = '';
+            acceptBtn.style.boxShadow = '';
+        });
+    }
+    
+    if (rejectBtn) {
+        rejectBtn.addEventListener('mouseenter', () => {
+            rejectBtn.style.transform = 'translateY(-2px)';
+            rejectBtn.style.background = 'rgba(255,255,255,0.15)';
+        });
+        rejectBtn.addEventListener('mouseleave', () => {
+            rejectBtn.style.transform = '';
+            rejectBtn.style.background = 'rgba(255,255,255,0.1)';
+        });
+    }
+});
+</script>
     </section>
 
     <script>
