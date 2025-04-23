@@ -1,85 +1,110 @@
-<body>
+<body> 
+    class CookieManager {
+  static set(name, value, days = 365, essential = false) {
+    if (!essential && !this.getConsent()) return false;
     
-// Set a cookie with name, value, and expiration days
-function setCookie(name, value, daysToLive) {
     const date = new Date();
-    date.setTime(date.getTime() + (daysToLive * 24 * 60 * 60 * 1000));
-    let expires = "expires=" + date.toUTCString();
-    document.cookie = `${name}=${value}; ${expires}; path=/; SameSite=Lax`;
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/; SameSite=Lax`;
+    return true;
+  }
+
+  static get(name) {
+    const cookies = decodeURIComponent(document.cookie).split('; ');
+    for (const cookie of cookies) {
+      const [cookieName, ...cookieValue] = cookie.split('=');
+      if (cookieName === name) {
+        return cookieValue.join('=');
+      }
+    }
+    return null;
+  }
+
+  static delete(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  }
+
+  static getConsent() {
+    return this.get('cookie_consent') === 'true';
+  }
 }
 
-// Get a cookie by name
-function getCookie(name) {
-    const cookieDecoded = decodeURIComponent(document.cookie);
-    const cookieArray = cookieDecoded.split('; ');
-    let result = null;
-    
-    cookieArray.forEach(cookie => {
-        if (cookie.indexOf(name + '=') === 0) {
-            result = cookie.substring(name.length + 1);
-        }
+class Personalization {
+  static init() {
+    this.loadTheme();
+    this.loadUserName();
+    this.setupThemeSelector();
+  }
+
+  static loadTheme() {
+    const theme = CookieManager.get('user_theme') || 'light';
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+
+  static loadUserName() {
+    const name = CookieManager.get('user_name');
+    if (name) {
+      document.getElementById('user-greeting').textContent = `Welcome back, ${name}!`;
+    }
+  }
+
+  static setupThemeSelector() {
+    document.querySelectorAll('[data-theme]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const theme = btn.dataset.theme;
+        document.documentElement.setAttribute('data-theme', theme);
+        CookieManager.set('user_theme', theme, 365, false);
+      });
     });
-    return result;
+  }
 }
 
-// Delete a cookie by name
-function deleteCookie(name) {
-    setCookie(name, null, -1);
-}
-// Store user's name
-function saveUserName(name) {
-    setCookie('user_name', name, 30);
-    updateGreeting(name);
-}
-
-function updateGreeting(name) {
-    const greetingElement = document.getElementById('user-greeting');
-    if (greetingElement) {
-        greetingElement.textContent = `Welcome back, ${name}!`;
+class CookieConsent {
+  static init() {
+    if (CookieManager.get('cookie_consent') === null) {
+      this.showBanner();
     }
-}
+    this.setupEventListeners();
+  }
 
-// Check for saved name on load
-window.addEventListener('DOMContentLoaded', function() {
-    const userName = getCookie('user_name');
-    if (userName) {
-        updateGreeting(userName);
-    }
-});
-// Example: Remember if user dismissed a banner
-function dismissBanner() {
-    setCookie('banner_dismissed', 'true', 7);
-    document.getElementById('promo-banner').style.display = 'none';
-}
+  static showBanner() {
+    document.getElementById('cookie-consent-banner').style.display = 'block';
+  }
 
-// Check if banner was dismissed
-window.addEventListener('DOMContentLoaded', function() {
-    if (getCookie('banner_dismissed') === 'true') {
-        document.getElementById('promo-banner').style.display = 'none';
-    }
-});
-// Cookie consent functions
-function showCookieConsent() {
-    if (!getCookie('cookie_consent')) {
-        document.getElementById('cookie-consent-banner').style.display = 'block';
-    }
-}
-
-function acceptCookies() {
-    setCookie('cookie_consent', 'true', 365);
+  static hideBanner() {
     document.getElementById('cookie-consent-banner').style.display = 'none';
-    // Now you can set your other cookies
+  }
+
+  static setupEventListeners() {
+    document.getElementById('accept-cookies').addEventListener('click', () => {
+      CookieManager.set('cookie_consent', 'true', 365, true);
+      this.hideBanner();
+      Personalization.init(); // Apply personalization now that we have consent
+    });
+
+    document.getElementById('reject-cookies').addEventListener('click', () => {
+      CookieManager.set('cookie_consent', 'false', 365, true);
+      this.hideBanner();
+      // Remove non-essential cookies
+      CookieManager.delete('user_theme');
+      CookieManager.delete('user_name');
+    });
+
+    document.getElementById('configure-cookies').addEventListener('click', () => {
+      // Implement your configuration modal here
+      alert('Cookie preferences configuration would appear here');
+    });
+  }
 }
 
-function rejectCookies() {
-    setCookie('cookie_consent', 'false', 365);
-    document.getElementById('cookie-consent-banner').style.display = 'none';
-    // Delete all non-essential cookies
-    deleteCookie('user_theme');
-    deleteCookie('user_name');
-    // ... other non-essential cookies
-}
-
-// Show consent banner if no decision made
-window.addEventListener('DOMContentLoaded', showCookieConsent);
+// Initialize everything when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+  CookieConsent.init();
+  
+  // Only initialize personalization if cookies are accepted
+  if (CookieManager.getConsent()) {
+    Personalization.init();
+  }
+});
 </body>
