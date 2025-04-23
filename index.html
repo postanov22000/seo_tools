@@ -167,13 +167,74 @@
             right: 0;
             z-index: 9999;
         }
+
+        /* Cookie Banner Styles */
+        #cookie-consent-banner {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(30, 30, 30, 0.95);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 -2px 15px rgba(0,0,0,0.3);
+            z-index: 9999;
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        #cookie-consent-banner div {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        #cookie-consent-banner p {
+            margin: 0;
+            color: #e5e7eb;
+            flex: 1;
+            min-width: 300px;
+            text-align: left;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        #cookie-consent-banner a {
+            color: #6366f1;
+            text-decoration: none;
+        }
+
+        #cookie-consent-banner button {
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        #cookie-consent-banner button:first-child {
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            border: none;
+            color: white;
+        }
+
+        #cookie-consent-banner button:last-child {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #e5e7eb;
+        }
     </style>
 </head>
 <body>
     <!-- Optional GitHub Corner Banner -->
     <a href="https://github.com/yourusername/yourrepo" class="github-corner" aria-label="View source on GitHub">
-    <i class="fas fa-rocket" style="font-size: 2.5rem; color: #6366f1; position: absolute; top: 20px; right: 20px;"></i>
-</a>
+        <i class="fas fa-rocket" style="font-size: 2.5rem; color: #6366f1; position: absolute; top: 20px; right: 20px;"></i>
+    </a>
 
     <nav class="navbar">
         <div class="logo">OptiRank</div>
@@ -191,9 +252,9 @@
         <div class="hero-content">
             <h1 class="scroll-animate">Next-Gen SEO Optimization for Modern Businesses</h1>
             <p class="scroll-animate">Harness AI-powered insights, competitor analysis, and real-time tracking to dominate search rankings.</p>
-           <a href="temporary.html" class="cta-button-link">
-  <button class="cta-button scroll-animate">Start Free Trial(early access) →</button>
-</a>
+            <a href="temporary.html" class="cta-button-link">
+                <button class="cta-button scroll-animate">Start Free Trial(early access) →</button>
+            </a>
         </div>
     </section>
 
@@ -215,8 +276,21 @@
                 <p>Comprehensive competitor benchmarking with actionable insights to outperform your rivals.</p>
             </div>
         </div>
-       
+    </section>
 
+    <!-- Cookie Consent Banner -->
+    <div id="cookie-consent-banner">
+        <div>
+            <p>
+                We use cookies to personalize content and analyze traffic to improve your experience. 
+                <a href="/cookie-policy">Learn more</a>.
+            </p>
+            <div>
+                <button id="accept-cookies">Accept All</button>
+                <button id="reject-cookies">Reject</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Scroll animation trigger
@@ -241,75 +315,45 @@
                 });
             });
         });
+
+        // Cookie Functions
+        function setCookie(name, value, days) {
+            const date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax`;
+        }
+
+        function getCookie(name) {
+            const cookies = document.cookie.split('; ');
+            for (const cookie of cookies) {
+                const [cookieName, cookieValue] = cookie.split('=');
+                if (cookieName === name) return cookieValue;
+            }
+            return null;
+        }
+
+        function acceptCookies() {
+            setCookie('cookie_consent', 'true', 365);
+            document.getElementById('cookie-consent-banner').style.display = 'none';
+            // You can now set other cookies here
+        }
+
+        function rejectCookies() {
+            setCookie('cookie_consent', 'false', 365);
+            document.getElementById('cookie-consent-banner').style.display = 'none';
+            // Delete non-essential cookies if needed
+        }
+
+        // Show banner if no consent decision exists
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!getCookie('cookie_consent')) {
+                document.getElementById('cookie-consent-banner').style.display = 'block';
+            }
+            
+            // Add event listeners
+            document.getElementById('accept-cookies').addEventListener('click', acceptCookies);
+            document.getElementById('reject-cookies').addEventListener('click', rejectCookies);
+        });
     </script>
-     <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(30, 30, 30, 0.95); padding: 20px; text-align: center; box-shadow: 0 -2px 15px rgba(0,0,0,0.3); z-index: 9999; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1);">
-    <div style="max-width: 800px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 15px;">
-        <p style="margin: 0; color: #e5e7eb; flex: 1; min-width: 300px; text-align: left; font-size: 14px; line-height: 1.5;">
-            We use cookies to personalize content and analyze traffic to improve your experience. 
-            <a href="/cookie-policy" style="color: #6366f1; text-decoration: none;">Learn more</a>.
-        </p>
-        <div style="display: flex; gap: 10px;">
-            <button onclick="acceptCookies()" style="padding: 8px 20px; background: linear-gradient(45deg, #6366f1, #8b5cf6); border: none; border-radius: 6px; color: white; font-weight: 500; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease;">
-                Accept All
-            </button>
-            <button onclick="rejectCookies()" style="padding: 8px 20px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); border-radius: 6px; color: #e5e7eb; font-weight: 500; cursor: pointer; transition: transform 0.2s ease;">
-                Reject
-            </button>
-        </div>
-    </div>
-</div>
-        
-        <style>
-
-        .cookie-banner {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #f8f9fa;
-  padding: 15px;
-  text-align: center;
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-  z-index: 9999;
-  display: none;
-  border-top: 1px solid #ddd;
-}
-
-.cookie-buttons {
-  margin-top: 10px;
-}
-
-.cookie-buttons button {
-  margin: 0 5px;
-  padding: 5px 15px;
-  cursor: pointer;
-}
-
-.theme-selector {
-  margin: 20px 0;
-  padding: 10px;
-  background: #f0f0f0;
-  border-radius: 5px;
-}
-
-</div>
-
-<!-- Theme Selector (example personalization) -->
-<div class="theme-selector">
-  <span>Theme:</span>
-  <button data-theme="light">Light</button>
-  <button data-theme="dark">Dark</button>
-  <button data-theme="system">System</button>
-</div>
-
-<!-- Personalized Greeting -->
-<div id="user-greeting"></div>
-            </style>
-        
-    <!-- Load your existing JS first -->
-<script src="cookies.js"></script>
-
-<!-- Then load cookie script -->
-<script src="cookies.js"></script>
 </body>
 </html>
