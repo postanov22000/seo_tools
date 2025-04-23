@@ -215,7 +215,34 @@
                 <p>Comprehensive competitor benchmarking with actionable insights to outperform your rivals.</p>
             </div>
         </div>
-        <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(30, 30, 30, 0.95); padding: 20px; text-align: center; box-shadow: 0 -2px 15px rgba(0,0,0,0.3); z-index: 9999; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1);">
+       
+
+
+    <script>
+        // Scroll animation trigger
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.scroll-animate').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+     <div id="cookie-consent-banner" style="display: none; position: fixed; bottom: 0; left: 0; right: 0; background: rgba(30, 30, 30, 0.95); padding: 20px; text-align: center; box-shadow: 0 -2px 15px rgba(0,0,0,0.3); z-index: 9999; backdrop-filter: blur(10px); border-top: 1px solid rgba(255,255,255,0.1);">
     <div style="max-width: 800px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 15px;">
         <p style="margin: 0; color: #e5e7eb; flex: 1; min-width: 300px; text-align: left; font-size: 14px; line-height: 1.5;">
             We use cookies to personalize content and analyze traffic to improve your experience. 
@@ -279,36 +306,6 @@
 <div id="user-greeting"></div>
             </style>
         
-        
-     
-
-
-    </section>
-
-    <script>
-        // Scroll animation trigger
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.scroll-animate').forEach((el) => {
-            observer.observe(el);
-        });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-    </script>
     <!-- Load your existing JS first -->
 <script src="cookies.js"></script>
 
