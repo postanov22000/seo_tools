@@ -333,7 +333,7 @@
     </div>
 
     <script>
-       // Hashing function (SHA-256)
+    // Hashing function (SHA-256)
 async function hashPassword(password) {
   const encoder = new TextEncoder();
   const data = encoder.encode(password + "SALT123"); // Adds basic salt
@@ -341,18 +341,19 @@ async function hashPassword(password) {
   return Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// Login form handler
+// Helper function for messages
+function showMessage(message, type) {
+  const box = document.getElementById('loginMessage');
+  box.textContent = message;
+  box.className = `message-box ${type}`;
+  box.style.display = 'block';
+}
+
+// Login form handler - ONLY THIS ONE SHOULD EXIST
 document.getElementById('loginForm').addEventListener('submit', async function(event) {
   event.preventDefault();
   const loginBtn = document.getElementById('loginBtn');
   const messageBox = document.getElementById('loginMessage');
-
-    // Inside signup.html's form handler:
-const hashedPassword = await hashPassword(password);
-localStorage.setItem('users', JSON.stringify([
-  ...(JSON.parse(localStorage.getItem('users')) || []),
-  { email, password: hashedPassword } // Stores ONLY hashed password
-]));
   
   // Get form values
   const email = document.getElementById('email').value.trim();
@@ -391,13 +392,18 @@ localStorage.setItem('users', JSON.stringify([
   }
 });
 
-// Helper function for messages
-function showMessage(message, type) {
-  const box = document.getElementById('loginMessage');
-  box.textContent = message;
-  box.className = `message-box ${type}`;
-  box.style.display = 'block';
-}
+// Social button hover effects (optional)
+document.querySelectorAll('.social-button').forEach(button => {
+  button.addEventListener('mouseenter', () => {
+    button.style.transform = 'translateY(-3px)';
+    button.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+  });
+  
+  button.addEventListener('mouseleave', () => {
+    button.style.transform = '';
+    button.style.boxShadow = '';
+  });
+});
     </script>
 </body>
 </html>
