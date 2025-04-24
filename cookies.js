@@ -1,12 +1,11 @@
-<body> 
-    class CookieManager {
+class CookieManager {
   static set(name, value, days = 365, essential = false) {
     if (!essential && !this.getConsent()) return false;
     
     const date = new Date();
     date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
     const expires = "expires=" + date.toUTCString();
-    document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/; SameSite=Lax`;
+    document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/; SameSite=Lax${location.protocol === 'https:' ? '; Secure' : ''}`;
     return true;
   }
 
@@ -28,6 +27,13 @@
   static getConsent() {
     return this.get('cookie_consent') === 'true';
   }
+
+  static init() {
+    if (this.get('cookie_consent') === 'false') {
+      this.delete('user_theme');
+      this.delete('user_name');
+    }
+  }
 }
 
 class Personalization {
@@ -44,7 +50,7 @@ class Personalization {
 
   static loadUserName() {
     const name = CookieManager.get('user_name');
-    if (name) {
+    if (name && document.getElementById('user-greeting')) {
       document.getElementById('user-greeting').textContent = `Welcome back, ${name}!`;
     }
   }
@@ -69,50 +75,51 @@ class CookieConsent {
   }
 
   static showBanner() {
-    document.getElementById('cookie-consent-banner').style.display = 'block';
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) banner.style.display = 'block';
   }
 
   static hideBanner() {
-    document.getElementById('cookie-consent-banner').style.display = 'none';
+    const banner = document.getElementById('cookie-consent-banner');
+    if (banner) banner.style.display = 'none';
   }
 
   static setupEventListeners() {
-    document.getElementById('accept-cookies').addEventListener('click', () => {
-      CookieManager.set('cookie_consent', 'true', 365, true);
-      this.hideBanner();
-      Personalization.init(); // Apply personalization now that we have consent
-    });
-      // Add this at the end of CookieManager class
-static init() {
-  // Delete existing cookies if consent was rejected
-  if(this.get('cookie_consent') === 'false') {
-    this.delete('user_theme');
-    this.delete('user_name');
+    const acceptBtn = document.getElementById('accept-cookies');
+    const rejectBtn = document.getElementById('reject-cookies');
+    const configBtn = document.getElementById('configure-cookies');
+
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', () => {
+        CookieManager.set('cookie_consent', 'true', 365, true);
+        this.hideBanner();
+        Personalization.init();
+      });
+    }
+
+    if (rejectBtn) {
+      rejectBtn.addEventListener('click', () => {
+        CookieManager.set('cookie_consent', 'false', 365, true);
+        this.hideBanner();
+        CookieManager.delete('user_theme');
+        CookieManager.delete('user_name');
+      });
+    }
+
+    if (configBtn) {
+      configBtn.addEventListener('click', () => {
+        alert('Cookie preferences configuration would appear here');
+      });
+    }
   }
 }
 
-    document.getElementById('reject-cookies').addEventListener('click', () => {
-      CookieManager.set('cookie_consent', 'false', 365, true);
-      this.hideBanner();
-      // Remove non-essential cookies
-      CookieManager.delete('user_theme');
-      CookieManager.delete('user_name');
-    });
-
-    document.getElementById('configure-cookies').addEventListener('click', () => {
-      // Implement your configuration modal here
-      alert('Cookie preferences configuration would appear here');
-    });
-  }
-}
-
-// Initialize everything when DOM is loaded
+// Initialize when DOM loads
 document.addEventListener('DOMContentLoaded', () => {
+  CookieManager.init();
   CookieConsent.init();
   
-  // Only initialize personalization if cookies are accepted
   if (CookieManager.getConsent()) {
     Personalization.init();
   }
 });
-</body>
