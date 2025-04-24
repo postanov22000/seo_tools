@@ -82,6 +82,14 @@ class CookieConsent {
       this.hideBanner();
       Personalization.init(); // Apply personalization now that we have consent
     });
+      // Add this at the end of CookieManager class
+static init() {
+  // Delete existing cookies if consent was rejected
+  if(this.get('cookie_consent') === 'false') {
+    this.delete('user_theme');
+    this.delete('user_name');
+  }
+}
 
     document.getElementById('reject-cookies').addEventListener('click', () => {
       CookieManager.set('cookie_consent', 'false', 365, true);
