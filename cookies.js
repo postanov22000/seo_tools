@@ -27,43 +27,6 @@ class CookieManager {
   static getConsent() {
     return this.get('cookie_consent') === 'true';
   }
-
-  static init() {
-    if (this.get('cookie_consent') === 'false') {
-      this.delete('user_theme');
-      this.delete('user_name');
-    }
-  }
-}
-
-class Personalization {
-  static init() {
-    this.loadTheme();
-    this.loadUserName();
-    this.setupThemeSelector();
-  }
-
-  static loadTheme() {
-    const theme = CookieManager.get('user_theme') || 'light';
-    document.documentElement.setAttribute('data-theme', theme);
-  }
-
-  static loadUserName() {
-    const name = CookieManager.get('user_name');
-    if (name && document.getElementById('user-greeting')) {
-      document.getElementById('user-greeting').textContent = `Welcome back, ${name}!`;
-    }
-  }
-
-  static setupThemeSelector() {
-    document.querySelectorAll('[data-theme]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const theme = btn.dataset.theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        CookieManager.set('user_theme', theme, 365, false);
-      });
-    });
-  }
 }
 
 class CookieConsent {
@@ -87,13 +50,11 @@ class CookieConsent {
   static setupEventListeners() {
     const acceptBtn = document.getElementById('accept-cookies');
     const rejectBtn = document.getElementById('reject-cookies');
-    const configBtn = document.getElementById('configure-cookies');
-
+    
     if (acceptBtn) {
       acceptBtn.addEventListener('click', () => {
         CookieManager.set('cookie_consent', 'true', 365, true);
         this.hideBanner();
-        Personalization.init();
       });
     }
 
@@ -101,25 +62,12 @@ class CookieConsent {
       rejectBtn.addEventListener('click', () => {
         CookieManager.set('cookie_consent', 'false', 365, true);
         this.hideBanner();
-        CookieManager.delete('user_theme');
-        CookieManager.delete('user_name');
-      });
-    }
-
-    if (configBtn) {
-      configBtn.addEventListener('click', () => {
-        alert('Cookie preferences configuration would appear here');
       });
     }
   }
 }
 
-// Initialize when DOM loads
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', () => {
-  CookieManager.init();
   CookieConsent.init();
-  
-  if (CookieManager.getConsent()) {
-    Personalization.init();
-  }
 });
