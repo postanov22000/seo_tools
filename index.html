@@ -294,68 +294,21 @@
         </div>
     </div>
 
-    <script>
-        // Scroll animation trigger
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if(entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.scroll-animate').forEach((el) => {
-            observer.observe(el);
-        });
+<script src="cookies.js"></script>
+<script>
+  // Scroll animation trigger only
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if(entry.isIntersecting) {
+        entry.target.classList.add('active');
+      }
+    });
+  }, { threshold: 0.1 });
 
-        // Smooth scroll for navigation
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
-
-        // Cookie Functions
-        function setCookie(name, value, days) {
-            const date = new Date();
-            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-            document.cookie = `${name}=${value};expires=${date.toUTCString()};path=/;SameSite=Lax`;
-        }
-
-        function getCookie(name) {
-            const cookies = document.cookie.split('; ');
-            for (const cookie of cookies) {
-                const [cookieName, cookieValue] = cookie.split('=');
-                if (cookieName === name) return cookieValue;
-            }
-            return null;
-        }
-
-        function acceptCookies() {
-            setCookie('cookie_consent', 'true', 365);
-            document.getElementById('cookie-consent-banner').style.display = 'none';
-            // You can now set other cookies here
-        }
-
-        function rejectCookies() {
-            setCookie('cookie_consent', 'false', 365);
-            document.getElementById('cookie-consent-banner').style.display = 'none';
-            // Delete non-essential cookies if needed
-        }
-
-        // Show banner if no consent decision exists
-        document.addEventListener('DOMContentLoaded', function() {
-            if (!getCookie('cookie_consent')) {
-                document.getElementById('cookie-consent-banner').style.display = 'block';
-            }
-            
-            // Add event listeners
-            document.getElementById('accept-cookies').addEventListener('click', acceptCookies);
-            document.getElementById('reject-cookies').addEventListener('click', rejectCookies);
-        });
-    </script>
+  document.querySelectorAll('.scroll-animate').forEach((el) => {
+    observer.observe(el);
+  });
+</script>
 </body>
 </html>
