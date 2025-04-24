@@ -346,6 +346,13 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
   event.preventDefault();
   const loginBtn = document.getElementById('loginBtn');
   const messageBox = document.getElementById('loginMessage');
+
+    // Inside signup.html's form handler:
+const hashedPassword = await hashPassword(password);
+localStorage.setItem('users', JSON.stringify([
+  ...(JSON.parse(localStorage.getItem('users')) || []),
+  { email, password: hashedPassword } // Stores ONLY hashed password
+]));
   
   // Get form values
   const email = document.getElementById('email').value.trim();
